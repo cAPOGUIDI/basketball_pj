@@ -22,6 +22,7 @@ $categories = getPublicCategories();
             <div class="header-content">
                 <h1>🏀 Basketball Training</h1>
                 <nav>
+                    <a href="contact.php" class="btn btn-outline">Contact</a>
                     <?php if (isLoggedIn()): ?>
                         <a href="dashboard.php" class="btn btn-secondary">Mon Espace</a>
                         <a href="logout.php" class="btn btn-outline">Déconnexion</a>

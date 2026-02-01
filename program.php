@@ -104,7 +104,17 @@ $exercises = getPersonalizedProgram($poste);
                 
                 <!-- Carte d'exercice -->
                 <div class="exercise-item">
-                    <?php if ($exercise['image_url']): ?>
+                    <?php if ($exercise['video_url']): ?>
+                        <!-- Vidéo en boucle -->
+                        <div style="width: 100%; height: 250px; border-radius: 8px; overflow: hidden; margin-bottom: 1rem; background: #000;">
+                            <video autoplay loop muted playsinline 
+                                   style="width: 100%; height: 100%; object-fit: cover;">
+                                <source src="<?php echo cleanOutput($exercise['video_url']); ?>" type="video/mp4">
+                                Votre navigateur ne supporte pas la vidéo.
+                            </video>
+                        </div>
+                    <?php elseif ($exercise['image_url']): ?>
+                        <!-- Image de secours -->
                         <div style="width: 100%; height: 200px; border-radius: 8px; overflow: hidden; margin-bottom: 1rem;">
                             <img src="<?php echo cleanOutput($exercise['image_url']); ?>" 
                                  alt="<?php echo cleanOutput($exercise['titre']); ?>"
