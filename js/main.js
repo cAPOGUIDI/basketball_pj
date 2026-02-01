@@ -67,8 +67,63 @@ function createExerciseCard(exercise) {
     const card = document.createElement('div');
     card.className = 'exercise-item';
     
-    // Ajouter une image si disponible
-    if (exercise.image_url) {
+    // Ajouter une vidéo si disponible (priorité sur l'image)
+    if (exercise.video_url) {
+        const videoContainer = document.createElement('div');
+        videoContainer.style.cssText = `
+            width: 100%;
+            height: 250px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            background: #000;
+            position: relative;
+        `;
+        
+        const video = document.createElement('video');
+        video.src = exercise.video_url;
+        video.autoplay = true;
+        video.loop = true;
+        video.muted = true;
+        video.playsInline = true;
+        video.controls = false;
+        video.style.cssText = `
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        `;
+        
+        // Gestion des erreurs de chargement
+        video.addEventListener('error', function(e) {
+            console.error('Erreur de chargement vidéo:', exercise.titre, e);
+            videoContainer.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: white; text-align: center; padding: 20px;">
+                    <div>
+                        <div style="font-size: 3rem; margin-bottom: 10px;">⚠️</div>
+                        <div>Vidéo non disponible</div>
+                        <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">
+                            ${exercise.titre}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        // Message de chargement
+        video.addEventListener('loadstart', function() {
+            console.log('Chargement vidéo:', exercise.titre);
+        });
+        
+        // Succès
+        video.addEventListener('loadeddata', function() {
+            console.log('✓ Vidéo chargée:', exercise.titre);
+        });
+        
+        videoContainer.appendChild(video);
+        card.appendChild(videoContainer);
+    } 
+    // Sinon, afficher l'image si disponible
+    else if (exercise.image_url) {
         const imageContainer = document.createElement('div');
         imageContainer.style.cssText = `
             width: 100%;
