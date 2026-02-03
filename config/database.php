@@ -8,8 +8,8 @@
 define('DB_HOST', 'localhost');
 define('DB_PORT', '5432');
 define('DB_NAME', 'basketball_training');
-define('DB_USER', 'basket_user');
-define('DB_PASS', 'admin');
+define('DB_USER', 'postgres');
+define('DB_PASS', '');
 
 // Fonction pour obtenir une connexion PDO à PostgreSQL
 function getDBConnection() {
