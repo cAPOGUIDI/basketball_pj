@@ -82,9 +82,13 @@ function createExerciseCard(exercise) {
         
         const video = document.createElement('video');
         video.src = exercise.video_url;
+        video.setAttribute('autoplay', '');
+        video.setAttribute('loop', '');
+        video.setAttribute('muted', '');
+        video.setAttribute('playsinline', '');
+        video.muted = true; // Force muted
         video.autoplay = true;
         video.loop = true;
-        video.muted = true;
         video.playsInline = true;
         video.controls = false;
         video.style.cssText = `
@@ -95,15 +99,15 @@ function createExerciseCard(exercise) {
         
         // Gestion des erreurs de chargement
         video.addEventListener('error', function(e) {
-            console.error('Erreur de chargement vidéo:', exercise.titre, e);
+            console.error('❌ Erreur vidéo:', exercise.titre);
+            console.error('URL:', exercise.video_url);
+            console.error('Erreur:', e);
             videoContainer.innerHTML = `
-                <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: white; text-align: center; padding: 20px;">
-                    <div>
-                        <div style="font-size: 3rem; margin-bottom: 10px;">⚠️</div>
-                        <div>Vidéo non disponible</div>
-                        <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">
-                            ${exercise.titre}
-                        </div>
+                <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: white; text-align: center; padding: 20px; flex-direction: column;">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">⚠️</div>
+                    <div style="font-size: 1.1rem; font-weight: bold;">Vidéo non disponible</div>
+                    <div style="font-size: 0.9rem; opacity: 0.7; margin-top: 5px;">
+                        ${exercise.titre}
                     </div>
                 </div>
             `;
@@ -111,13 +115,26 @@ function createExerciseCard(exercise) {
         
         // Message de chargement
         video.addEventListener('loadstart', function() {
-            console.log('Chargement vidéo:', exercise.titre);
+            console.log('⏳ Chargement vidéo:', exercise.titre);
         });
         
         // Succès
         video.addEventListener('loadeddata', function() {
-            console.log('✓ Vidéo chargée:', exercise.titre);
+            console.log('✅ Vidéo chargée:', exercise.titre);
+            // Forcer le play
+            video.play().catch(function(err) {
+                console.warn('Autoplay bloqué, tentative de play manuel:', err);
+            });
         });
+        
+        // Tentative de lecture après un court délai
+        setTimeout(function() {
+            if (video.paused) {
+                video.play().catch(function(err) {
+                    console.warn('Play manuel échoué:', err);
+                });
+            }
+        }, 100);
         
         videoContainer.appendChild(video);
         card.appendChild(videoContainer);

@@ -85,6 +85,14 @@ $hasProfile = hasCompletedProfile($userId);
                 <p>Étirements, pré-game et prévention blessures</p>
                 <a href="index.php#exercises" class="btn btn-secondary">Voir les exercices</a>
             </div>
+            <!-- Admin : Gestion des contacts -->
+            <?php if (isAdmin()): ?>
+                <div class="dashboard-card admin-card">
+                    <h2>👑 Administration</h2>
+                    <p>Gérer les messages des utilisateurs</p>
+                    <a href="admin_contacts.php" class="btn btn-primary">Voir les messages</a>
+                </div>
+            <?php endif; ?>
             
             <!-- Favoris (fonctionnalité future) -->
             <div class="dashboard-card">

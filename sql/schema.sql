@@ -1,14 +1,15 @@
 -- ================================================
 -- SCHÉMA DE BASE DE DONNÉES POSTGRESQL
 -- Site Web Basketball Training
--- Version complète avec toutes les modifications
+-- Version complète avec système d'administration
 -- ================================================
 
--- Table des utilisateurs
+-- Table des utilisateurs (avec système de rôles)
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
+    role VARCHAR(1) DEFAULT 'U' CHECK (role IN ('U', 'A')), -- U=User, A=Admin
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_login TIMESTAMP
 );
@@ -77,7 +78,7 @@ INSERT INTO exercices (category_id, titre, description, duree, difficulte, image
 INSERT INTO exercices (category_id, titre, description, duree, repetitions, difficulte, image_url, video_url) VALUES
 -- Meneur (1)
 (7, 'Dribble en slalom', 'Dribble entre cônes à vitesse progressive', 180, 10, 'moyen', 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=500', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'),
-(7, 'Tirs en course', 'Layups alternés des deux côtés', 300, 20, 'moyen', 'https://images.unsplash.com/photo-3551675/3551675-uhd_2560_1440_25fps.mp4', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'),
+(7, 'Tirs en course', 'Layups alternés des deux côtés', 300, 20, 'moyen', 'https://images.unsplash.com/photo-1608245449230-4ac19066d2d0?w=500', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'),
 -- Arrière (2)
 (8, 'Tirs en suspension', 'Jump shots depuis différentes positions', 300, 15, 'moyen', 'https://images.unsplash.com/photo-1519766304817-4f37bda74a26?w=500', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'),
 (8, 'Sprint défensif', 'Sprints latéraux et retours', 120, 8, 'difficile', 'https://images.unsplash.com/photo-1574623452334-1e0ac2b3ccb4?w=500', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4'),
@@ -132,12 +133,14 @@ CREATE INDEX idx_progres_user ON progres(user_id);
 CREATE INDEX idx_contacts_email ON contacts(email);
 CREATE INDEX idx_contacts_statut ON contacts(statut);
 CREATE INDEX idx_contacts_created ON contacts(created_at DESC);
+CREATE INDEX idx_users_role ON users(role);
 
 -- Vue pour obtenir les informations complètes d'un utilisateur
 CREATE VIEW user_full_info AS
 SELECT 
     u.id,
     u.email,
+    u.role,
     u.created_at,
     u.last_login,
     p.nom,
@@ -155,5 +158,13 @@ SELECT
 FROM users u
 LEFT JOIN profiles p ON u.id = p.user_id;
 
--- Confirmation
-SELECT 'Base de données créée avec succès !' as message;
+-- Vue pour les statistiques admin
+CREATE VIEW admin_stats AS
+SELECT 
+    (SELECT COUNT(*) FROM users) as total_users,
+    (SELECT COUNT(*) FROM users WHERE role = 'A') as total_admins,
+    (SELECT COUNT(*) FROM contacts) as total_contacts,
+    (SELECT COUNT(*) FROM contacts WHERE statut = 'nouveau') as contacts_nouveaux,
+    (SELECT COUNT(*) FROM exercices) as total_exercices,
+    (SELECT COUNT(*) FROM profiles WHERE poste IS NOT NULL) as profiles_complets;
+

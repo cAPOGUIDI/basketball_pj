@@ -1028,3 +1028,18 @@ body {
         gap: 1.5rem;
     }
 }
+
+
+
+/*partie admin*/
+
+.admin-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-top: 4px solid #FFD700;
+}
+
+.admin-card h2,
+.admin-card p {
+    color: white;
+}

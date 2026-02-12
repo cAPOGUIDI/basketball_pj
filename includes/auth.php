@@ -4,6 +4,35 @@
  */
 
 require_once __DIR__ . '/../config/database.php';
+/**
+ * Vérifie si l'utilisateur est administrateur
+ * @return bool
+ */
+function isAdmin() {
+    if (!isLoggedIn()) {
+        return false;
+    }
+    
+    $userId = getCurrentUserId();
+    $db = getDBConnection();
+    
+    $stmt = $db->prepare("SELECT role FROM users WHERE id = ?");
+    $stmt->execute([$userId]);
+    $user = $stmt->fetch();
+    
+    return $user && $user['role'] === 'A';
+}
+
+/**
+ * Protège une page admin (redirige si non admin)
+ * @param string $redirectUrl
+ */
+function requireAdmin($redirectUrl = 'dashboard.php') {
+    if (!isAdmin()) {
+        header("Location: $redirectUrl");
+        exit();
+    }
+}
 
 // Démarre la session si elle n'est pas déjà démarrée
 function startSession() {
