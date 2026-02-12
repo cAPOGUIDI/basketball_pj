@@ -13,15 +13,19 @@ $success = '';
 
 // Traitement du formulaire de profil
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nom = trim($_POST['nom'] ?? '');
+    $prenom = trim($_POST['prenom'] ?? '');
     $poids = floatval($_POST['poids'] ?? 0);
     $taille = intval($_POST['taille'] ?? 0);
     $poste = intval($_POST['poste'] ?? 0);
     
     // Validation basique
-    if ($poids <= 0 || $taille <= 0 || $poste < 1 || $poste > 5) {
+    if (empty($nom) || empty($prenom)) {
+        $error = 'Veuillez remplir votre nom et prénom';
+    } elseif ($poids <= 0 || $taille <= 0 || $poste < 1 || $poste > 5) {
         $error = 'Veuillez remplir tous les champs correctement';
     } else {
-        if (saveProfile($userId, $poids, $taille, $poste)) {
+        if (saveProfile($userId, $nom, $prenom, $poids, $taille, $poste)) {
             $success = 'Profil sauvegardé avec succès !';
             
             // Recharger le profil
@@ -65,6 +69,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
             
             <form method="POST" action="" class="profile-form">
+                <div class="form-group">
+                    <label for="nom">Nom</label>
+                    <input 
+                        type="text" 
+                        id="nom" 
+                        name="nom" 
+                        required
+                        value="<?php echo cleanOutput($userProfile['nom'] ?? ''); ?>"
+                        placeholder="Ex: Dupont"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="prenom">Prénom</label>
+                    <input 
+                        type="text" 
+                        id="prenom" 
+                        name="prenom" 
+                        required
+                        value="<?php echo cleanOutput($userProfile['prenom'] ?? ''); ?>"
+                        placeholder="Ex: Jean"
+                    >
+                </div>
+
                 <div class="form-group">
                     <label for="poids">Poids (kg)</label>
                     <input 

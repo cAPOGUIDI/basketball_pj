@@ -24,7 +24,7 @@ $hasProfile = hasCompletedProfile($userId);
     <header class="main-header">
         <div class="container">
             <div class="header-content">
-                <h1>🏀 Basketball Training</h1>
+                <h1><a href="index.php" class="btn btn-outline">🏀 Basketball Training</a></h1>
                 <nav>
                     <a href="index.php" class="btn btn-outline">Accueil</a>
                     <a href="logout.php" class="btn btn-secondary">Déconnexion</a>
@@ -35,7 +35,7 @@ $hasProfile = hasCompletedProfile($userId);
     
     <div class="container dashboard-container">
         <div class="welcome-section">
-            <h1>Bienvenue, <?php echo cleanOutput($userProfile['email']); ?> !</h1>
+            <h1>Bienvenue, <?php echo cleanOutput($userProfile['nom']); ?> !</h1>
             
             <?php if (!$hasProfile): ?>
                 <div class="alert alert-warning">

@@ -13,7 +13,7 @@ require_once __DIR__ . '/../config/database.php';
  * @param int $poste
  * @return bool
  */
-function saveProfile($userId, $poids, $taille, $poste) {
+function saveProfile($userId, $nom, $prenom, $poids, $taille, $poste) {
     $db = getDBConnection();
     
     // Validation des données
@@ -30,20 +30,19 @@ function saveProfile($userId, $poids, $taille, $poste) {
         // Mise à jour
         $stmt = $db->prepare("
             UPDATE profiles 
-            SET poids = ?, taille = ?, poste = ?, updated_at = CURRENT_TIMESTAMP 
+            SET nom = ?, prenom = ?, poids = ?, taille = ?, poste = ?, updated_at = CURRENT_TIMESTAMP 
             WHERE user_id = ?
         ");
-        return $stmt->execute([$poids, $taille, $poste, $userId]);
+        return $stmt->execute([$nom, $prenom, $poids, $taille, $poste, $userId]);
     } else {
         // Insertion
         $stmt = $db->prepare("
-            INSERT INTO profiles (user_id, poids, taille, poste) 
-            VALUES (?, ?, ?, ?)
+            INSERT INTO profiles (user_id, nom, prenom, poids, taille, poste) 
+            VALUES (?, ?, ?, ?, ?, ?)
         ");
-        return $stmt->execute([$userId, $poids, $taille, $poste]);
+        return $stmt->execute([$userId, $nom, $prenom, $poids, $taille, $poste]);
     }
 }
-
 /**
  * Récupère les exercices publics par catégorie
  * @param string $categoryName - Nom de la catégorie
