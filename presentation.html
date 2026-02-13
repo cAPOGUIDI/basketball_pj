@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basketball Training - Présentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            overflow: hidden;
+        }
+        
+        .slides-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .slide {
+            min-width: 100vw;
+            height: 100vh;
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1;
+        }
+        
+        .slide > * {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .slide h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .slide h2 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: #FF6B35;
+        }
+        
+        .slide h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #FF8C42;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            color: #ccc;
+            margin-bottom: 3rem;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .feature-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 16px;
+            border-left: 4px solid #FF6B35;
+        }
+        
+        .feature-box h4 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #FF8C42;
+        }
+        
+        .feature-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .feature-box li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .feature-box li::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: #FF6B35;
+        }
+        
+        .code-block {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            border-left: 4px solid #FF6B35;
+        }
+        
+        .highlight {
+            color: #FF8C42;
+            font-weight: bold;
+        }
+        
+        .architecture-diagram {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 16px;
+            margin: 2rem 0;
+        }
+        
+        .layer {
+            background: rgba(255, 107, 53, 0.2);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 12px;
+            border-left: 4px solid #FF6B35;
+        }
+        
+        .layer-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #FF8C42;
+            margin-bottom: 0.5rem;
+        }
+        
+        .db-schema {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .table-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-top: 3px solid #FF6B35;
+        }
+        
+        .table-card h4 {
+            color: #FF8C42;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .table-card ul {
+            list-style: none;
+            font-size: 0.9rem;
+        }
+        
+        .table-card li {
+            padding: 0.3rem 0;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+        
+        .slide-number {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+        
+        .tech-stack {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .tech-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .tech-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="slides-container" id="slidesContainer">
+        
+        <!-- Slide 1: Page de garde -->
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=2000');">
+            <h1>🏀 Basketball Training</h1>
+            <p class="subtitle">Plateforme Web de Programmes d'Entraînement Personnalisés</p>
+            <div style="margin-top: 3rem; font-size: 1.2rem; line-height: 2;">
+                <p>📅 Février 2026</p>
+                <p>💻 Technologies : PHP • PostgreSQL • JavaScript • HTML/CSS</p>
+                <p>🎯 Objectif : Application web complète avec gestion utilisateurs et contenus multimédias</p>
+            </div>
+        </div>
+        
+        <!-- Slide 2: Architecture du projet -->
+        <div class="slide">
+            <h2>🏗️ Architecture du Projet</h2>
+            
+            <div class="architecture-diagram">
+                <div class="layer">
+                    <div class="layer-title">🎨 FRONT-END (Présentation)</div>
+                    <p>• HTML5 / CSS3 moderne (Glassmorphism, Gradients)</p>
+                    <p>• JavaScript ES6+ (Gestion dynamique, AJAX)</p>
+                    <p>• Design responsive & animations fluides</p>
+                </div>
+                
+                <div class="layer">
+                    <div class="layer-title">⚙️ BACK-END (Logique Métier)</div>
+                    <p>• PHP 7.4+ avec architecture MVC simplifiée</p>
+                    <p>• Séparation : auth.php, functions.php, database.php</p>
+                    <p>• API REST pour exercices (JSON)</p>
+                </div>
+                
+                <div class="layer">
+                    <div class="layer-title">🗄️ BASE DE DONNÉES (Persistance)</div>
+                    <p>• PostgreSQL avec requêtes préparées (PDO)</p>
+                    <p>• 7 tables relationnelles + 2 vues</p>
+                    <p>• Index optimisés pour performances</p>
+                </div>
+            </div>
+            
+            <div class="code-block">
+                <span class="highlight">Structure des dossiers :</span><br>
+                projet_web/<br>
+                ├── config/          <span style="opacity: 0.7;">// Configuration BDD</span><br>
+                ├── includes/        <span style="opacity: 0.7;">// Fonctions PHP réutilisables</span><br>
+                ├── css/             <span style="opacity: 0.7;">// Styles globaux</span><br>
+                ├── js/              <span style="opacity: 0.7;">// Scripts JavaScript</span><br>
+                ├── api/             <span style="opacity: 0.7;">// Endpoints REST</span><br>
+                └── *.php            <span style="opacity: 0.7;">// Pages de l'application</span>
+            </div>
+        </div>
+        
+        <!-- Slide 3: Base de données -->
+        <div class="slide">
+            <h2>🗄️ Schéma de Base de Données PostgreSQL</h2>
+            
+            <div class="db-schema">
+                <div class="table-card">
+                    <h4>👤 USERS</h4>
+                    <ul>
+                        <li>id (PK)</li>
+                        <li>email (UNIQUE)</li>
+                        <li>password_hash</li>
+                        <li>role (U/A)</li>
+                        <li>created_at</li>
+                    </ul>
+                </div>
+                
+                <div class="table-card">
+                    <h4>📋 PROFILES</h4>
+                    <ul>
+                        <li>id (PK)</li>
+                        <li>user_id (FK → users)</li>
+                        <li>nom, prenom</li>
+                        <li>poids, taille</li>
+                        <li>poste (1-5)</li>
+                    </ul>
+                </div>
+                
+                <div class="table-card">
+                    <h4>🏋️ EXERCICES</h4>
+                    <ul>
+                        <li>id (PK)</li>
+                        <li>category_id (FK)</li>
+                        <li>titre, description</li>
+                        <li>video_url, image_url</li>
+                        <li>difficulte</li>
+                    </ul>
+                </div>
+                
+                <div class="table-card">
+                    <h4>📁 CATEGORIES</h4>
+                    <ul>
+                        <li>id (PK)</li>
+                        <li>nom</li>
+                        <li>is_public (BOOL)</li>
+                    </ul>
+                </div>
+                
+                <div class="table-card">
+                    <h4>📧 CONTACTS</h4>
+                    <ul>
+                        <li>id (PK)</li>
+                        <li>user_id (FK, nullable)</li>
+                        <li>type_message</li>
+                        <li>statut</li>
+                        <li>message</li>
+                    </ul>
+                </div>
+                
+                <div class="table-card">
+                    <h4>⭐ FAVORIS</h4>
+                    <ul>
+                        <li>id (PK)</li>
+                        <li>user_id (FK)</li>
+                        <li>exercice_id (FK)</li>
+                        <li>UNIQUE(user, exercice)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(255, 107, 53, 0.2); border-radius: 12px;">
+                <h3>🔗 Relations clés</h3>
+                <p>✓ users (1) ↔ (1) profiles — One-to-One</p>
+                <p>✓ categories (1) ↔ (N) exercices — One-to-Many</p>
+                <p>✓ users (N) ↔ (N) exercices — Many-to-Many via favoris</p>
+            </div>
+        </div>
+        
+        <!-- Slide 4: Système d'authentification -->
+        <div class="slide">
+            <h2>🔐 Système d'Authentification Sécurisé</h2>
+            
+            <div class="content-grid">
+                <div class="feature-box">
+                    <h4>Inscription (register.php)</h4>
+                    <div class="code-block" style="font-size: 0.8rem;">
+function registerUser($email, $password) {<br>
+&nbsp;&nbsp;// Validation email<br>
+&nbsp;&nbsp;if (!filter_var($email, FILTER_VALIDATE_EMAIL))<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return false;<br><br>
+&nbsp;&nbsp;// Hash bcrypt (coût 10)<br>
+&nbsp;&nbsp;$hash = <span class="highlight">password_hash</span>($password, PASSWORD_BCRYPT);<br><br>
+&nbsp;&nbsp;// Insertion sécurisée<br>
+&nbsp;&nbsp;$stmt = $db-><span class="highlight">prepare</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"INSERT INTO users (email, password_hash) VALUES (?, ?)"<br>
+&nbsp;&nbsp;);<br>
+&nbsp;&nbsp;$stmt->execute([$email, $hash]);<br>
+}
+                    </div>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>Connexion (login.php)</h4>
+                    <div class="code-block" style="font-size: 0.8rem;">
+function loginUser($email, $password) {<br>
+&nbsp;&nbsp;$stmt = $db-><span class="highlight">prepare</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"SELECT * FROM users WHERE email = ?"<br>
+&nbsp;&nbsp;);<br>
+&nbsp;&nbsp;$user = $stmt->fetch();<br><br>
+&nbsp;&nbsp;// Vérification sécurisée<br>
+&nbsp;&nbsp;if (<span class="highlight">password_verify</span>($password, $user['password_hash'])) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;$_SESSION['user_id'] = $user['id'];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return true;<br>
+&nbsp;&nbsp;}<br>
+}
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem;">
+                <h3>🛡️ Mesures de sécurité</h3>
+                <div class="content-grid">
+                    <div class="feature-box">
+                        <ul>
+                            <li><span class="highlight">Requêtes préparées PDO</span> → Protection injection SQL</li>
+                            <li><span class="highlight">password_hash() bcrypt</span> → Hash irréversible</li>
+                            <li><span class="highlight">htmlspecialchars()</span> → Protection XSS</li>
+                        </ul>
+                    </div>
+                    <div class="feature-box">
+                        <ul>
+                            <li><span class="highlight">Sessions HTTP-only</span> → Cookies sécurisés</li>
+                            <li><span class="highlight">CSRF protection</span> → Tokens de session</li>
+                            <li><span class="highlight">Validation serveur</span> → Toutes données vérifiées</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 5: Fonctionnalités principales -->
+        <div class="slide">
+            <h2>⚡ Fonctionnalités Clés</h2>
+            
+            <div class="content-grid">
+                <div class="feature-box">
+                    <h4>🎯 Programmes Personnalisés</h4>
+                    <div class="code-block" style="font-size: 0.8rem;">
+function getPersonalizedProgram($poste) {<br>
+&nbsp;&nbsp;$categories = [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;1 => 'Programme Meneur',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;2 => 'Programme Arrière',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;// ...<br>
+&nbsp;&nbsp;];<br><br>
+&nbsp;&nbsp;$stmt = $db-><span class="highlight">prepare</span>("<br>
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT e.* FROM exercices e<br>
+&nbsp;&nbsp;&nbsp;&nbsp;JOIN categories c ON e.category_id = c.id<br>
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE c.nom = ?<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ORDER BY e.difficulte<br>
+&nbsp;&nbsp;");<br>
+&nbsp;&nbsp;return $stmt->fetchAll();<br>
+}
+                    </div>
+                    <p style="margin-top: 1rem; opacity: 0.8;">5 postes différents, exercices adaptés à chaque profil</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>🎬 Médias Dynamiques</h4>
+                    <ul>
+                        <li>Vidéos en boucle (autoplay, muted)</li>
+                        <li>Images de secours (fallback)</li>
+                        <li>Gestion erreurs + retry</li>
+                        <li>Optimisation performances</li>
+                    </ul>
+                    <div class="code-block" style="font-size: 0.75rem; margin-top: 1rem;">
+video.addEventListener('error', function() {<br>
+&nbsp;&nbsp;// Fallback vers image<br>
+&nbsp;&nbsp;if (exercise.image_url) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;showImage(exercise.image_url);<br>
+&nbsp;&nbsp;}<br>
+});
+                    </div>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>📧 Système de Contact</h4>
+                    <ul>
+                        <li>Formulaire avec validation</li>
+                        <li>Types : Avis, Bug, Suggestion</li>
+                        <li>Statuts : Nouveau, Lu, Traité</li>
+                        <li>Stockage PostgreSQL</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>👑 Panel Administrateur</h4>
+                    <ul>
+                        <li>Rôle admin (A) vs user (U)</li>
+                        <li>Gestion messages contact</li>
+                        <li>Statistiques temps réel</li>
+                        <li>Actions : Marquer lu/traité/supprimer</li>
+                    </ul>
+                    <div class="code-block" style="font-size: 0.75rem; margin-top: 1rem;">
+function isAdmin() {<br>
+&nbsp;&nbsp;return $_SESSION['role'] === 'A';<br>
+}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 6: API et JavaScript -->
+        <div class="slide">
+            <h2>🔌 API REST & JavaScript Dynamique</h2>
+            
+            <div class="content-grid">
+                <div class="feature-box">
+                    <h4>Endpoint API (api/get_exercises.php)</h4>
+                    <div class="code-block" style="font-size: 0.8rem;">
+header('Content-Type: application/json');<br><br>
+$category = $_GET['category'] ?? '';<br>
+$exercises = getPublicExercisesByCategory($category);<br><br>
+echo <span class="highlight">json_encode</span>([<br>
+&nbsp;&nbsp;'success' => true,<br>
+&nbsp;&nbsp;'exercises' => $exercises,<br>
+&nbsp;&nbsp;'count' => count($exercises)<br>
+]);
+                    </div>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>Consommation côté client (main.js)</h4>
+                    <div class="code-block" style="font-size: 0.8rem;">
+async function loadExercises(categoryName) {<br>
+&nbsp;&nbsp;const url = `api/get_exercises.php?category=${categoryName}`;<br>
+&nbsp;&nbsp;const response = await <span class="highlight">fetch</span>(url);<br>
+&nbsp;&nbsp;const data = await response.<span class="highlight">json()</span>;<br><br>
+&nbsp;&nbsp;if (data.success) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;displayExercises(data.exercises);<br>
+&nbsp;&nbsp;}<br>
+}
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem;">
+                <h3>✨ Fonctionnalités JavaScript</h3>
+                <div class="content-grid">
+                    <div class="feature-box">
+                        <h4>Modal Dynamique</h4>
+                        <ul>
+                            <li>Affichage exercices sans rechargement</li>
+                            <li>Création DOM dynamique</li>
+                            <li>Gestion événements (click, ESC)</li>
+                            <li>Animations CSS</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-box">
+                        <h4>Gestion Vidéo HTML5</h4>
+                        <ul>
+                            <li>Autoplay + Loop natifs</li>
+                            <li>Event listeners (error, loadeddata)</li>
+                            <li>Retry automatique</li>
+                            <li>Compteur de caractères en temps réel</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 7: Synthèse et perspectives -->
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=2000');">
+            <h2>🎯 Synthèse & Perspectives</h2>
+            
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <div class="tech-icon">🎨</div>
+                    <h4>Front-End</h4>
+                    <p>HTML5 • CSS3</p>
+                    <p>JavaScript ES6+</p>
+                    <p>Design Moderne</p>
+                </div>
+                
+                <div class="tech-item">
+                    <div class="tech-icon">⚙️</div>
+                    <h4>Back-End</h4>
+                    <p>PHP 7.4+</p>
+                    <p>Architecture MVC</p>
+                    <p>API REST</p>
+                </div>
+                
+                <div class="tech-item">
+                    <div class="tech-icon">🗄️</div>
+                    <h4>Database</h4>
+                    <p>PostgreSQL</p>
+                    <p>7 Tables + 2 Vues</p>
+                    <p>Relations complexes</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 3rem;">
+                <h3>📊 Chiffres Clés</h3>
+                <div class="content-grid">
+                    <div class="feature-box">
+                        <h4>✅ Réalisé</h4>
+                        <ul>
+                            <li>12 pages PHP fonctionnelles</li>
+                            <li>7 tables PostgreSQL</li>
+                            <li>Authentification sécurisée (bcrypt)</li>
+                            <li>Système de rôles (User/Admin)</li>
+                            <li>Contenus multimédias (vidéos/images)</li>
+                            <li>Interface responsive complète</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-box">
+                        <h4>🚀 Évolutions Futures</h4>
+                        <ul>
+                            <li>Système de favoris fonctionnel</li>
+                            <li>Suivi progression utilisateur</li>
+                            <li>Notifications par email</li>
+                            <li>Upload vidéos personnalisées</li>
+                            <li>API mobile (React Native)</li>
+                            <li>Statistiques avancées</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem; text-align: center; font-size: 1.5rem;">
+                <p>🏀 <strong>Basketball Training</strong> — Plateforme complète et évolutive</p>
+                <p style="margin-top: 1rem; opacity: 0.8;">Merci de votre attention !</p>
+            </div>
+        </div>
+        
+    </div>
+    
+    <div class="slide-number" id="slideNumber">1 / 7</div>
+    
+    <div class="controls">
+        <button class="btn" onclick="previousSlide()">← Précédent</button>
+        <button class="btn" onclick="nextSlide()">Suivant →</button>
+    </div>
+    
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 7;
+        const container = document.getElementById('slidesContainer');
+        const slideNumber = document.getElementById('slideNumber');
+        
+        function updateSlide() {
+            container.style.transform = `translateX(-${currentSlide * 100}vw)`;
+            slideNumber.textContent = `${currentSlide + 1} / ${totalSlides}`;
+        }
+        
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+        
+        function previousSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+        
+        // Navigation au clavier
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') previousSlide();
+        });
+        
+        // Animation d'entrée
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                document.querySelector('.slide h1').style.animation = 'fadeInUp 1s ease';
+            }, 200);
+        });
+    </script>
+</body>
+</html>
